@@ -1,27 +1,42 @@
 import canonicalLaneMathlib.AdmissibleClass
-import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.StabilizabilityDetectability
 
 namespace HautevilleHouse
 namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 
-structure SeparationPrinciplePackage {sys : DiscreteTimeSystem} where
-  controller : sys.StateSpace → sys.ControlSpace
-  observer : sys.ObservationSpace → sys.StateSpace
-  closedLoopState : sys.StateSpace := sys.initialState
-  separationCondition : Prop
+structure SeparationPrinciplePackage {S : DiscreteTimeStateSpacePackage}
+    {O : ObservationModelPackage S} {C : ControlPolicyPackage S O}
+    {F : FilteringEstimationPackage S O C} where
+  estimatedState : Type u
+  certaintyEquivalence : Prop
+  optimalControlSeparated : Prop
   separationTheorem : Prop
+  stabilityUnderModelMismatch : Prop
 
-structure SeparationPrincipleEvidence {sys : DiscreteTimeSystem} (S : SeparationPrinciplePackage) where
-  controllerDefined : S.controller = S.controller
-  observerDefined : S.observer = S.observer
-  separationConditionClosed : S.separationCondition
-  separationTheoremClosed : S.separationTheorem
+structure SeparationPrincipleEvidence {S : DiscreteTimeStateSpacePackage}
+    {O : ObservationModelPackage S} {C : ControlPolicyPackage S O}
+    {F : FilteringEstimationPackage S O C}
+    (P : SeparationPrinciplePackage S O C F) where
+  estimatedStateDefined : True
+  certaintyEquivalenceClosed : P.certaintyEquivalence
+  optimalControlSeparatedClosed : P.optimalControlSeparated
+  separationTheoremClosed : P.separationTheorem
+  stabilityUnderModelMismatchClosed : P.stabilityUnderModelMismatch
 
-def SeparationPrincipleClosed {sys : DiscreteTimeSystem} (S : SeparationPrinciplePackage) : Prop :=
-  S.separationCondition ∧ S.separationTheorem
+def SeparationPrincipleClosed {S : DiscreteTimeStateSpacePackage}
+    {O : ObservationModelPackage S} {C : ControlPolicyPackage S O}
+    {F : FilteringEstimationPackage S O C}
+    (P : SeparationPrinciplePackage S O C F) : Prop :=
+  P.certaintyEquivalence ∧ P.optimalControlSeparated ∧
+  P.separationTheorem ∧ P.stabilityUnderModelMismatch
 
-theorem separation_principle_closed_from_evidence {sys : DiscreteTimeSystem} (S : SeparationPrinciplePackage) (E : SeparationPrincipleEvidence S) : SeparationPrincipleClosed S := by
-  exact And.intro E.separationConditionClosed E.separationTheoremClosed
+theorem separation_principle_closed_from_evidence
+    {S : DiscreteTimeStateSpacePackage} {O : ObservationModelPackage S}
+    {C : ControlPolicyPackage S O} {F : FilteringEstimationPackage S O C}
+    (P : SeparationPrinciplePackage S O C F)
+    (E : SeparationPrincipleEvidence P) : SeparationPrincipleClosed P := by
+  exact And.intro E.certaintyEquivalenceClosed
+    (And.intro E.optimalControlSeparatedClosed
+      (And.intro E.separationTheoremClosed E.stabilityUnderModelMismatchClosed))
 
 end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 end HautevilleHouse

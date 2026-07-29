@@ -3,19 +3,27 @@ import canonicalLaneMathlib.AdmissibleClass
 namespace HautevilleHouse
 namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 
-structure ObservationModel (S : Type) (Y : Type) where
-  observationSpace : Type w
-  observationFunction : S → Y
-  observationEquality : ∀ (y1 y2 : Y), y1 = y2
-  observationDefined : Prop
-  observationClosedProp : Prop
+structure ObservationModelPackage {S : DiscreteTimeStateSpacePackage} where
+  observationSpace : Type u
+  observationTopology : TopologicalSpace observationSpace
+  observationFunction : S.stateSpace → observationSpace
+  noiseModel : Prop
+  conditionalIndependence : Prop
+  observabilityCondition : Prop
 
-def observationClosed {S Y : Type} (model : ObservationModel S Y) : Prop :=
-  model.observationClosedProp
+structure ObservationModelEvidence {S : DiscreteTimeStateSpacePackage} (O : ObservationModelPackage S) where
+  noiseModelClosed : O.noiseModel
+  conditionalIndependenceClosed : O.conditionalIndependence
+  observabilityConditionClosed : O.observabilityCondition
 
-theorem observation_closed_from_evidence {S Y : Type} (model : ObservationModel S Y)
-  (h : model.observationClosedProp) : observationClosed model :=
-  h
+def ObservationModelClosed {S : DiscreteTimeStateSpacePackage} (O : ObservationModelPackage S) : Prop :=
+  O.noiseModel ∧ O.conditionalIndependence ∧ O.observabilityCondition
 
-end HautevilleHouse
+theorem observation_model_closed_from_evidence
+    {S : DiscreteTimeStateSpacePackage} (O : ObservationModelPackage S)
+    (E : ObservationModelEvidence O) : ObservationModelClosed O := by
+  exact And.intro E.noiseModelClosed
+    (And.intro E.conditionalIndependenceClosed E.observabilityConditionClosed)
+
+end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 end HautevilleHouse
