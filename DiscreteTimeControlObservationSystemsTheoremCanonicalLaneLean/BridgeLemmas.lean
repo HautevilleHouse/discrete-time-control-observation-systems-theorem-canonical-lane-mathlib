@@ -1,0 +1,14 @@
+import canonicalLaneMathlib.AdmissibleClass
+
+namespace HautevilleHouse
+namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
+
+def bridgeClosed (A : AdmissibleClass) : Prop :=
+  DiscreteTimeControlObservationWitnessClosed A.object
+
+theorem bridge_from_admissible_class (A : AdmissibleClass) :
+    bridgeClosed A := by
+  exact A.object.conclusion
+
+end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
+end HautevilleHouse
