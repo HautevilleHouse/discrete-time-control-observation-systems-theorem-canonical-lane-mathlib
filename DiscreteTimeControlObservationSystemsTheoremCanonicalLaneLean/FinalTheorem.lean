@@ -1,7 +1,4 @@
-import canonicalLaneMathlib.AdmissibleClass
-import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.FeedbackStabilization
-import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.SeparationPrinciple
-import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.OptimalControl
+import DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.GateLemmas
 
 namespace HautevilleHouse
 namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
@@ -9,9 +6,9 @@ namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 def ConstrainedDiscreteTimeControlObservationSystemsClosure (A : AdmissibleClass) : Prop :=
   bridgeClosed A ∧ gateClosed A
 
-theorem constrained_discrete_time_control_observation_systems_endgame
-  (A : AdmissibleClass) : ConstrainedDiscreteTimeControlObservationSystemsClosure A :=
-  And.intro (bridge_from_admissible_class A) (gate_from_admissible_class A)
+theorem constrained_discrete_time_control_observation_systems_endgame (A : AdmissibleClass) :
+    ConstrainedDiscreteTimeControlObservationSystemsClosure A := by
+  exact And.intro (bridge_from_admissible_class A) (gate_from_admissible_class A)
 
-end HautevilleHouse
+end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 end HautevilleHouse

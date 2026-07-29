@@ -4,13 +4,13 @@ namespace HautevilleHouse
 namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 
 structure AdmissibleClass where
-  object : DiscreteTimeControlObservationAdmittedObject
+  object : AdmittedObject
   endpointSatisfied : Prop
   remainderRecorded : Prop
   gateWitness : endpointSatisfied ∨ remainderRecorded
 
 def admittedClosure (A : AdmissibleClass) : Prop :=
-  DiscreteTimeControlObservationWitnessClosed A.object ∧ (A.endpointSatisfied ∨ A.remainderRecorded)
+  bridgeClosed A ∧ gateClosed A
 
 end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 end HautevilleHouse

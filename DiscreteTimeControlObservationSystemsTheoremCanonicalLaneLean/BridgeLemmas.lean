@@ -4,7 +4,7 @@ namespace HautevilleHouse
 namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 
 def bridgeClosed (A : AdmissibleClass) : Prop :=
-  DiscreteTimeControlObservationWitnessClosed A.object
+  A.object.conclusion
 
 theorem bridge_from_admissible_class (A : AdmissibleClass) :
     bridgeClosed A := by
