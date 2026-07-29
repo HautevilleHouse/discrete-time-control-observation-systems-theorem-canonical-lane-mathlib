@@ -26,6 +26,7 @@ structure DiscreteTimeSystemEvidence (sys : DiscreteTimeSystem) where
 def DiscreteTimeSystemClosed (sys : DiscreteTimeSystem) : Prop := True
 
 theorem discrete_time_system_closed_from_evidence (sys : DiscreteTimeSystem) (E : DiscreteTimeSystemEvidence sys) : DiscreteTimeSystemClosed sys := by
+  unfold DiscreteTimeSystemClosed
   trivial
 
 end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
