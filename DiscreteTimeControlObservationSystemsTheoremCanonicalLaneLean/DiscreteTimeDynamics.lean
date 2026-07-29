@@ -3,27 +3,25 @@ import canonicalLaneMathlib.AdmissibleClass
 namespace HautevilleHouse
 namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 
-structure DiscreteTimeDynamics where
+structure DiscreteTimeDynamicsPackage where
   stateSpace : Type u
   observationSpace : Type v
   controlSpace : Type w
   stateTransition : stateSpace → controlSpace → stateSpace
   observationMap : stateSpace → observationSpace
-  transitionWellDefined : Prop
-  observationWellDefined : Prop
-  transitionWellDefinedTerm : transitionWellDefined
-  observationWellDefinedTerm : observationWellDefined
+  dynamicsConsistent : Prop
+  dynamicsConsistentTerm : dynamicsConsistent
 
-structure DiscreteTimeDynamicsEvidence (D : DiscreteTimeDynamics) where
-  transitionWellDefinedClosed : D.transitionWellDefined
-  observationWellDefinedClosed : D.observationWellDefined
+structure DiscreteTimeDynamicsEvidence (D : DiscreteTimeDynamicsPackage) where
+  dynamicsConsistentClosed : D.dynamicsConsistent
 
-def DiscreteTimeDynamicsClosed (D : DiscreteTimeDynamics) : Prop :=
-  D.transitionWellDefined ∧ D.observationWellDefined
+def DiscreteTimeDynamicsClosed (D : DiscreteTimeDynamicsPackage) : Prop :=
+  D.dynamicsConsistent
 
-theorem discrete_time_dynamics_closed_from_evidence (D : DiscreteTimeDynamics)
-    (E : DiscreteTimeDynamicsEvidence D) : DiscreteTimeDynamicsClosed D := by
-  exact And.intro E.transitionWellDefinedClosed E.observationWellDefinedClosed
+theorem discrete_time_dynamics_closed_from_evidence
+    (D : DiscreteTimeDynamicsPackage) (E : DiscreteTimeDynamicsEvidence D) :
+    DiscreteTimeDynamicsClosed D := by
+  exact E.dynamicsConsistentClosed
 
 end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 end HautevilleHouse
