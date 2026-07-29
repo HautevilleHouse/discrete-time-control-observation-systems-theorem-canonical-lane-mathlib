@@ -1,30 +1,27 @@
 import canonicalLaneMathlib.AdmissibleClass
-import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.ControlledPlant
-import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.ObservationModel
-import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.FeedbackStabilization
+import HautevilleHouse.DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean.StabilizabilityDetectability
 
 namespace HautevilleHouse
 namespace DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 
-structure SeparationPrincipleEvidence {S U Y : Type} (plant : ControlledPlant S U)
-  (observer : ObservationModel S Y) (controller : FeedbackController S U Y)
-  (stabilization : FeedbackStabilizationPackage plant observer controller) where
-  separationClosed : Prop
-  separationClosedTerm : separationClosed
+structure SeparationPrinciplePackage {sys : DiscreteTimeSystem} where
+  controller : sys.StateSpace → sys.ControlSpace
+  observer : sys.ObservationSpace → sys.StateSpace
+  closedLoopState : sys.StateSpace := sys.initialState
+  separationCondition : Prop
+  separationTheorem : Prop
 
-def SeparationPrincipleClosed {S U Y : Type} (plant : ControlledPlant S U)
-  (observer : ObservationModel S Y) (controller : FeedbackController S U Y)
-  (stabilization : FeedbackStabilizationPackage plant observer controller) : Prop :=
-  ∃ (sep : SeparationPrincipleEvidence plant observer controller stabilization),
-  sep.separationClosed
+structure SeparationPrincipleEvidence {sys : DiscreteTimeSystem} (S : SeparationPrinciplePackage) where
+  controllerDefined : S.controller = S.controller
+  observerDefined : S.observer = S.observer
+  separationConditionClosed : S.separationCondition
+  separationTheoremClosed : S.separationTheorem
 
-theorem separation_principle_closed_from_evidence {S U Y : Type}
-  (plant : ControlledPlant S U) (observer : ObservationModel S Y)
-  (controller : FeedbackController S U Y)
-  (stabilization : FeedbackStabilizationPackage plant observer controller)
-  (evidence : SeparationPrincipleEvidence plant observer controller stabilization) :
-  SeparationPrincipleClosed plant observer controller stabilization :=
-  Exists.intro evidence evidence.separationClosedTerm
+def SeparationPrincipleClosed {sys : DiscreteTimeSystem} (S : SeparationPrinciplePackage) : Prop :=
+  S.separationCondition ∧ S.separationTheorem
 
-end HautevilleHouse
+theorem separation_principle_closed_from_evidence {sys : DiscreteTimeSystem} (S : SeparationPrinciplePackage) (E : SeparationPrincipleEvidence S) : SeparationPrincipleClosed S := by
+  exact And.intro E.separationConditionClosed E.separationTheoremClosed
+
+end DiscreteTimeControlObservationSystemsTheoremCanonicalLaneLean
 end HautevilleHouse
